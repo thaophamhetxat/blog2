@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+        .row.content {
+            height: 1500px
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+
+            .row.content {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body sec:authorize="isAuthenticated()">
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-3 sidenav">
+            <h4>Diễn đàng</h4>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="#section1">Trang chủ</a></li>
+                <li><a href="/api/blogs/userHome">Home</a></li>
+                <li><a href="#section3">Family</a></li>
+                <li><a href="#section3">Photos</a></li>
+                <li>
+                    <div sec:authorize="isAuthenticated()">
+                        <a th:href="@{/}">Home</a> | <a th:href="@{/logout}">Logout</a>
+                    </div>
+                </li>
+
+            </ul>
+            <br>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search Blog..">
+                <span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+            </div>
+        </div>
+
+        <div class="col-sm-9">
+            <div th:each="bl,loop: ${list}" >
+                <h4><small th:text="${loop.count}"> </small></h4>
+                <hr>
+                <h2 th:text="${bl.title}"></h2>
+                <h5>Hưng Yên, <span class="glyphicon glyphicon-time" th:text="${bl.date}"></span></h5>
+                <h5>
+                    <span class="glyphicon glyphicon-eye-open" th:text="${bl.views}"></span>
+                    <span class="glyphicon glyphicon-thumbs-up" th:text="${bl.likes}"></span>
+                    <span class="glyphicon glyphicon-thumbs-down" th:text="${bl.dislike}"></span>
+                </h5>
+
+                <h5><span class="label label-danger" th:text="${bl.genre.nameGenre}"></span></h5><br>
+                <p th:text="${bl.content}"></p>
+                <br>
+                <br>
+
+                <!--            Comments-->
+                <td><a th:href="@{likeblog/{id}(id = ${bl.id})}" class="btn btn-warning">Like</a></td>
+                <td><a th:href="@{unlikeblog/{id}(id = ${bl.id})}" class="btn btn-warning">Dislike</a></td>
+                <h4>People a Comment:</h4>
+                <form action="/api/blogs/createComment" method="post" >
+                    <div class="form-group">
+                        <td><input name="comments" class="form-control" rows="3"></td>
+
+<!--                        <textarea class="form-control" rows="3" required>-->
+<!--                        </textarea>-->
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <td><a th:href="@{comment/{id}(id = ${bl.id})}" class="btn btn-warning">show comment</a></td>
+                </form>
+                <br>
+                <br>
+
+
+                <!--          show  Comments-->
+
+
+<!--                <div >-->
+<!--                    <p><span class="badge" th:text="${loop.size}"></span> Comments:</p>-->
+<!--                    <br>-->
+<!--                    <div class="row">-->
+
+<!--                        <div class="col-sm-2 text-center">-->
+<!--                            <img src="bandmember.jpg" class="img-circle" height="65" width="65" alt="Avatar">-->
+<!--                        </div>-->
+
+<!--                        <div class="col-sm-10">-->
+<!--                            <h4 th:text="${listUser.username}">Anja <small>Sep 29, 2015, 9:12 PM</small></h4>-->
+<!--                            <p th:text="${comment.comments}"></p>-->
+<!--                            <br>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="container-fluid">
+    <p>Footer Text</p>
+</footer>
+
+</body>
+
+</html>

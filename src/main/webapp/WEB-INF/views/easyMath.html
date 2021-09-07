@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>EasyMath</title>
+    <link rel="stylesheet" href="../../css/easyMath.css">
+    <script src="../../js/easyMath.js"></script>
+
+
+</head>
+<body>
+
+<div id="main">
+    <h1>Easy Math</h1>
+    <p id="score">Score: 0</p>
+    <p id="level">Level: 1</p>
+    <h5 id="time"></h5>
+    <div id="display">
+    </div>
+    <div id="result"></div>
+    <div id="clickTF">
+        <button type="button" id="true" onclick="Y(true)">TRUE</button>
+        <button type="button" id="false" onclick="Y(false)">FALSE</button>
+    </div>
+    <div id="hightscore"></div>
+</div>
+
+<audio PRELOAD="auto">
+    <source src="./audio/nhacnen.mp3">
+</audio>
+<script type="text/javascript">
+    let gameTF = new GameTF();
+    gameTF.mathdisplay();
+
+    let timerun = 15;
+    function timetolive() {
+        timerun--;
+        if (timerun !== 0) {
+            if (timerun <= 10) {
+                document.getElementById('time').style.color = 'red'
+            }
+            document.getElementById('time').innerHTML = timerun;
+            setTimeout("timetolive()", 1000);
+        } else {
+            document.getElementById('time').innerHTML = 'hết giờ';
+            alert('Hết thời gian');
+            sound2.play();
+            alert('Điểm của bạn là: ' + gameTF.score);
+            location.reload();
+        }
+
+    }
+
+    timetolive();
+    function Y(chon) {
+        gameTF.check(chon);
+    }
+</script>
+</body>
+</html>
